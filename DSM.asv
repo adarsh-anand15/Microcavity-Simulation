@@ -4,6 +4,7 @@ function [n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,thetai,LambdaC)
 d1=LambdaC/(4*n1); % Thickness of layer 1
 d2=LambdaC/(4*n2); % Thickness of layer 2
 dc=LambdaC/(2*nc); % Thickness of cavity layer
+Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %theta1 = asin(ni/n1*sin(thetai)); % angle of propagation in the medium "1"
 %theta2 = asin(ni/n2*sin(thetai)); % angle of propagation in the medium "2"
 thetac = asin(ni/nc*sin(thetai)); % angle of propagation in the cavity

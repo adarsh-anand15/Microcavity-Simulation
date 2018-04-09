@@ -13,10 +13,11 @@ nc= n2; % Refractive index of medium of cavity
 LambdaC=530; % central wavelength
 DeltaLambda=400; % Observed range of wavelength around central wavelength
 nLambda=1000; % No. of points in graph
-Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %%%
+
+%gggs
 %% defining structure for Microcavity
-[n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,thetai,LambdaC);
+[n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,d1,d2,dc,thetai,thetac,thetaf);
 %% Finding Characteristic matrices
 % initializing as identity matrix
 for z=1:nLambda+1;
