@@ -24,6 +24,7 @@ Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Arra
 thetac = asin(ni/nc*sin(thetai)); % angle of propagation in the cavity
 thetaf=asin(ni/nf*sin(thetai)); % exit angle 
 %%%
+%gggs
 %% defining structure for Microcavity
 n=zeros(1,N_1+N_2+3);
 d=zeros(1,N_1+N_2+3);
