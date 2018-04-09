@@ -19,7 +19,7 @@ Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Arra
 [n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,thetai,LambdaC);
 %%%
 %% Finding Characteristic matrices
-[ Ss,Sp ] = CM( N_1+N_2+1,n,d,theta );
+[ Ss,Sp ] = CM( N_1+N_2+1,n,d,theta,Lambda,nLambda );
 %%%
 %% Reflectivity calculation
 for z=1:nLambda+1

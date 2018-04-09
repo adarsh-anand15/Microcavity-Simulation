@@ -1,4 +1,4 @@
-function [ Ss,Sp ] = CM( N,n,d,theta )
+function [ Ss,Sp ] = CM( N,n,d,theta,Lambda,nLambda )
 %function to calculate characteristic matrices for stack of given structure
 %   Detailed explanation goes here
 % initializing as identity matrix
