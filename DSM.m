@@ -1,4 +1,5 @@
 function [n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,d1,d2,thetai)
+%
 n=zeros(1,N_1+N_2+3);
 d=zeros(1,N_1+N_2+3);
 theta=zeros(1,N_1+N_2+3);
