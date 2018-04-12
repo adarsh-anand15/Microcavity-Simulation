@@ -22,7 +22,7 @@ function varargout = main_gui(varargin)
 
 % Edit the above text to modify the response to help main_gui
 
-% Last Modified by GUIDE v2.5 12-Apr-2018 16:50:00
+% Last Modified by GUIDE v2.5 12-Apr-2018 19:06:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -381,3 +381,18 @@ function Untitled_1_Callback(hObject, eventdata, handles)
 % hObject    handle to Untitled_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in play_stop.
+function play_stop_Callback(hObject, eventdata, handles)
+% hObject    handle to play_stop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+button_state = get(hObject,'Value');
+if button_state == get(hObject,'Max')
+    set(hObject,'string','Stop');
+	
+elseif button_state == get(hObject,'Min')
+	set(hObject,'string','Play');
+% Hint: get(hObject,'Value') returns toggle state of play_stop
+end

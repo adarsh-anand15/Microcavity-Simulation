@@ -2,21 +2,13 @@ function Microcavity_Reflectivity(handles)
 %Reflectivity vs wavelength of microcavity%
 %% Initialization of various parameters
 %clear;
-thetai=str2num(get(handles.thetai,'string'))*pi/180;%30*pi/180; %angle of incidence
-ni=str2num(get(handles.thetai,'string'));%1; % initial medium
-nf=str2num(get(handles.thetai,'string'));%1; % final medium
-N_1=str2num(get(handles.thetai,'string'));%11; % No. of layers for one DBR1
-N_2=str2num(get(handles.thetai,'string'));%11; % No. of layers for one DBR2
-n1=str2num(get(handles.thetai,'string'));% 2.02; % Refractive index of medium 1
-n2=str2num(get(handles.thetai,'string'));%1.46; %Refractive index of medium 2
-nc= str2num(get(handles.thetai,'string'));%n2; % Refractive index of medium of cavity
-LambdaC=530; % central wavelength
+parameters=getdata(handles);
 DeltaLambda=400; % Observed range of wavelength around central wavelength
 nLambda=1000; % No. of points in graph
-Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
+Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:parameters.LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %%%
 %% defining structure for Microcavity
-[n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,thetai,LambdaC);
+[n,d,theta]=DSM(parameters);
 %%%
 %% Finding Characteristic matrices
 [ Ss,Sp ] = CM( N_1+N_2+1,n,d,theta,Lambda,nLambda );
@@ -32,11 +24,12 @@ for z=1:nLambda+1;
 end
 %%%
 %% Plotting Result
+cla(handles.graph);
 hold on
 xlabel('Wavelength (nm)','fontweight','bold');
 ylabel('Reflectance','fontweight','bold');
-graphs=plot(Lambda,Rs(:),'b-');
-graphp=plot(Lambda,Rp(:),'r-');
+plot(Lambda,Rs(:),'b-');
+plot(Lambda,Rp(:),'r-');
 %set(graph1,'LineWidth',1);
 %%%
 end

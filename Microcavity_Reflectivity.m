@@ -2,26 +2,17 @@ function Microcavity_Reflectivity(handles)
 %Reflectivity vs wavelength of microcavity%
 %% Initialization of various parameters
 %clear;
-thetai=str2num(get(handles.thetai,'string'))*pi/180;%30*pi/180; %angle of incidence
-Ei=str2num(get(handles.Ei,'string'));% Initial Electric field amplitude
-thetaEi=str2num(get(handles.thetaEi,'string'));% Angle between Electric field and plane of incidence
-ni=str2num(get(handles.ni,'string'));%1; % initial medium
-nf=str2num(get(handles.nf,'string'));%1; % final medium
-N_1=str2num(get(handles.N_1,'string'));%11; % No. of layers for one DBR1
-N_2=str2num(get(handles.N_2,'string'));%11; % No. of layers for one DBR2
-n1=str2num(get(handles.n1,'string'));% 2.02; % Refractive index of medium 1
-n2=str2num(get(handles.n2,'string'));%1.46; %Refractive index of medium 2
-nc= str2num(get(handles.nc,'string'));%n2; % Refractive index of medium of cavity
-LambdaC=str2num(get(handles.LambdaC,'string'));%530; % central wavelength
+parameters=getdata(handles); % getting the parameters from GUI
 DeltaLambda=400; % Observed range of wavelength around central wavelength
 nLambda=1000; % No. of points in graph
-Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
+Lambda = parameters.LambdaC-DeltaLambda/2:DeltaLambda/nLambda:parameters.LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %%%
 %% defining structure for Microcavity
-[n,d,theta]=DSM(N_1,N_2,ni,nf,n1,n2,nc,thetai,LambdaC);
+[n,d,theta]=DSM(parameters);
+N=parameters.N_1+parameters.N_2+1;
 %%%
 %% Finding Characteristic matrices
-[ Ss,Sp ] = CM( N_1+N_2+1,n,d,theta,Lambda,nLambda );
+[ Ss,Sp ] = CM( N,n,d,theta,Lambda,nLambda );
 %%%
 %% Reflectivity calculation
 for z=1:nLambda+1
