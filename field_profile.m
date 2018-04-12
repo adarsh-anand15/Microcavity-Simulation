@@ -1,16 +1,27 @@
-function field_profile()
+function field_profile(handles)
 %Field Profile of Microcavity%
 %% Initialization of various parameters
-clear
+%clear
 thetai=0; %angle of incidence
-ni=1; % initial medium
-nf=1; % final medium
+%thetai=str2num(get(handles.thetai,'string'))*pi/180;%30*pi/180; %angle of incidence
+Ei=str2num(get(handles.Ei,'string'));% Initial Electric field amplitude
+%thetaEi=str2num(get(handles.thetaEi,'string'));% Angle between Electric field and plane of incidence
+ni=str2num(get(handles.ni,'string'));%1; % initial medium
+nf=str2num(get(handles.nf,'string'));%1; % final medium
+%N_1=str2num(get(handles.N_1,'string'));%11; % No. of layers for one DBR1
+%N_2=str2num(get(handles.N_2,'string'));%11; % No. of layers for one DBR2
+n1=str2num(get(handles.n1,'string'));% 2.02; % Refractive index of medium 1
+n2=str2num(get(handles.n2,'string'));%1.46; %Refractive index of medium 2
+nc= str2num(get(handles.nc,'string'));%n2; % Refractive index of medium of cavity
+LambdaC=str2num(get(handles.LambdaC,'string'));%530; % central wavelength
+%ni=1; % initial medium
+%nf=1; % final medium
 N=43; % No. of layers for one DBR
-n1= 2.02; % Refractive index of medium 1
-n2=1.46; %Refractive index of medium 2
-nc= n2; % Refractive index of medium of cavity
-LambdaC=530; % central wavelength
-Ei=5; %Initial electric field amplitude in V/m
+%n1= 2.02; % Refractive index of medium 1
+%n2=1.46; %Refractive index of medium 2
+%nc= n2; % Refractive index of medium of cavity
+%LambdaC=530; % central wavelength
+%Ei=5; %Initial electric field amplitude in V/m
 %%%
 %% calculation of various parameters
 d1=LambdaC/(4*n1); % Thickness of layer 1
@@ -207,6 +218,10 @@ yf=real(Ef(1)*exp(-i*kp*xf)*exp(i*kp*l)+Ef(2)*exp(i*kp*xf)*exp(-i*kp*l));
 l=l+dc;
 x=[x,xf];
 y=[y,yf];
-%%
+%% plotting Result
+cla(handles.graph);
+hold on
+xlabel('Electric Field (V/m)','fontweight','bold');
+ylabel('x (nm)','fontweight','bold');
 plot(x,y);
 end
