@@ -221,7 +221,7 @@ y=[y,yf];
 %% plotting Result
 cla(handles.graph);
 hold on
-xlabel('Electric Field (V/m)','fontweight','bold');
-ylabel('x (nm)','fontweight','bold');
+xlabel('x (nm)','fontweight','bold');
+ylabel('Electric Field (V/m)','fontweight','bold');
 plot(x,y);
 end
