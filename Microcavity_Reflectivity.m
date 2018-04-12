@@ -14,6 +14,11 @@ MicrocavityS=DSMicrocavity(parameters);
 [ Ss,Sp ] = CMatrices(MicrocavityS,Lambda,nLambda );
 %%%
 %% Reflectivity calculation
+% Initializing with zeros
+rs=zeros(1,nLambda+1);
+rp=zeros(1,nLambda+1);
+Rs=zeros(1,nLambda+1);
+Rp=zeros(1,nLambda+1);
 for z=1:nLambda+1
     rs(z)=Ss(2,1,z)/Ss(1,1,z);
     rp(z)=Sp(2,1,z)/Sp(1,1,z);
