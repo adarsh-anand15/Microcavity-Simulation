@@ -2,16 +2,16 @@ function Microcavity_Reflectivity(handles)
 %Reflectivity vs wavelength of microcavity%
 %% Initialization of various parameters
 %clear;
-parameters=getdata(handles);
+parameters=getdata(handles); % getting the parameters from GUI
 DeltaLambda=400; % Observed range of wavelength around central wavelength
 nLambda=1000; % No. of points in graph
-Lambda = LambdaC-DeltaLambda/2:DeltaLambda/nLambda:parameters.LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
+Lambda = parameters.LambdaC-DeltaLambda/2:DeltaLambda/nLambda:parameters.LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %%%
 %% defining structure for Microcavity
-[n,d,theta]=DSM(parameters);
+MicrocavityS=DSM(parameters);
 %%%
 %% Finding Characteristic matrices
-[ Ss,Sp ] = CM( N_1+N_2+1,n,d,theta,Lambda,nLambda );
+[ Ss,Sp ] = CM(MicrocavityS,Lambda,nLambda );
 %%%
 %% Reflectivity calculation
 for z=1:nLambda+1

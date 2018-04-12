@@ -8,11 +8,10 @@ nLambda=1000; % No. of points in graph
 Lambda = parameters.LambdaC-DeltaLambda/2:DeltaLambda/nLambda:parameters.LambdaC+DeltaLambda/2; % Array of wavelength points for entire range
 %%%
 %% defining structure for Microcavity
-[n,d,theta]=DSM(parameters);
-N=parameters.N_1+parameters.N_2+1;
+MicrocavityS=DSMicrocavity(parameters);
 %%%
 %% Finding Characteristic matrices
-[ Ss,Sp ] = CM( N,n,d,theta,Lambda,nLambda );
+[ Ss,Sp ] = CMatrices(MicrocavityS,Lambda,nLambda );
 %%%
 %% Reflectivity calculation
 for z=1:nLambda+1

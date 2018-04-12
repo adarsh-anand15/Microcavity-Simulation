@@ -1,7 +1,11 @@
-function [ Ss,Sp ] = CM( N,n,d,theta,Lambda,nLambda )
+function [ Ss,Sp ] = CMatrices( MicrocavityS,Lambda,nLambda )
 %function to calculate characteristic matrices for stack of given structure
 %   Detailed explanation goes here
 % initializing as identity matrix
+n=MicrocavityS.n;
+d=MicrocavityS.d;
+theta=MicrocavityS.theta;
+N=MicrocavityS.N;
 for z=1:nLambda+1;
         Ss(:,:,z)=eye(2);
         Sp(:,:,z)=eye(2);

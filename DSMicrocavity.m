@@ -1,4 +1,4 @@
-function [n,d,theta]=DSM(parameters)
+function MicrocavityS=DSMicrocavity(parameters)
 % function to define structure of microcavity
 %% calculation of various parameters
 %theta1 = asin(ni/n1*sin(thetai)); % angle of propagation in the medium "1"
@@ -47,4 +47,9 @@ n(parameters.N_1+parameters.N_2+3)=parameters.nf;
 d(parameters.N_1+parameters.N_2+3)=0;
 theta(parameters.N_1+parameters.N_2+3)=thetaf;
 %%%
+%% Total Number of layers
+MicrocavityS.n=n;
+MicrocavityS.d=d;
+MicrocavityS.theta=theta;
+MicrocavityS.N=parameters.N_1+parameters.N_2+1;
 end

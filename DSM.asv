@@ -1,7 +1,6 @@
 function [n,d,theta]=DSM(parameters)
 % function to define structure of microcavity
 %% calculation of various parameters
-
 %theta1 = asin(ni/n1*sin(thetai)); % angle of propagation in the medium "1"
 %theta2 = asin(ni/n2*sin(thetai)); % angle of propagation in the medium "2"
 thetac = asin(parameters.ni/parameters.nc*sin(parameters.thetai)); % angle of propagation in the cavity
@@ -20,26 +19,26 @@ theta(1)=parameters.thetai;
 for m = 2:parameters.N_1+1
     if rem(m,2)==0
         n(m)=parameters.n1; % may introduce disorder later
-        d(m)=d1; % may introduce disorder later
+        d(m)=parameters.d1; % may introduce disorder later
     else
         n(m)=parameters.n2;
-        d(m)=d2;
+        d(m)=parameters.d2;
     end   
     theta(m)=asin(parameters.ni/n(m)*sin(parameters.thetai));
 end
 %%%
 % cavity layer
 n(parameters.N_1+2)=parameters.nc;
-d(parameters.N_1+2)=dc;
+d(parameters.N_1+2)=parameters.dc;
 theta(parameters.N_1+2)=thetac;
 % DBR2
 for m = parameters.N_1+3:parameters.N_1+parameters.N_2+2
     if rem(m,2)==0
         n(m)=parameters.n1; % may introduce disorder later
-        d(m)=d1; % may introduce disorder later
+        d(m)=parameters.d1; % may introduce disorder later
     else
         n(m)=parameters.n2;
-        d(m)=d2;
+        d(m)=parameters.d2;
     end   
     theta(m)=asin(parameters.ni/n(m)*sin(parameters.thetai));
 end
@@ -48,4 +47,6 @@ n(parameters.N_1+parameters.N_2+3)=parameters.nf;
 d(parameters.N_1+parameters.N_2+3)=0;
 theta(parameters.N_1+parameters.N_2+3)=thetaf;
 %%%
+%% Total Number of la
+N=parameters.N_1+parameters.N_2+1;
 end
