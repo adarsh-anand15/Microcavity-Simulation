@@ -1,55 +1,56 @@
-function MicrocavityS=DSMicrocavity(parameters)
+function MicrocavityS=DSMicrocavity(app)
 % function to define structure of microcavity
 %% calculation of various parameters
 %theta1 = asin(ni/n1*sin(thetai)); % angle of propagation in the medium "1"
 %theta2 = asin(ni/n2*sin(thetai)); % angle of propagation in the medium "2"
-thetac = asin(parameters.ni/parameters.nc*sin(parameters.thetai)); % angle of propagation in the cavity
-thetaf=asin(parameters.ni/parameters.nf*sin(parameters.thetai)); % exit angle 
+thetac = asin(app.M_ni.Value/app.M_nc.Value*sin(app.M_thetai.Value*pi/180)); % angle of propagation in the cavity
+thetaf=asin(app.M_ni.Value/app.M_nf.Value*sin(app.M_thetai.Value*pi/180)); % exit angle 
 %%%
 %% defining structure
-n=zeros(1,parameters.N_1+parameters.N_2+3);
-d=zeros(1,parameters.N_1+parameters.N_2+3);
-theta=zeros(1,parameters.N_1+parameters.N_2+3);
+N=app.M_D1_N.Value+app.M_D2_N.Value+1;
+n=zeros(1,N+2);
+d=zeros(1,N+2);
+theta=zeros(1,N+2);
 % initial medium
-n(1)=parameters.ni;
+n(1)=app.M_ni.Value;
 d(1)=0;
-theta(1)=parameters.thetai;
+theta(1)=app.M_thetai.Value*pi/180;
 %%%
 % DBR1
-for m = 2:parameters.N_1+1
+for m = 2:app.M_D1_N.Value+1
     if rem(m,2)==0
-        n(m)=parameters.n1; % may introduce disorder later
-        d(m)=parameters.d1; % may introduce disorder later
+        n(m)=app.M_D1_n1.Value; % may introduce disorder later
+        d(m)=app.M_D1_d1.Value; % may introduce disorder later
     else
-        n(m)=parameters.n2;
-        d(m)=parameters.d2;
+        n(m)=app.M_D1_n2.Value;
+        d(m)=app.M_D1_d2.Value;
     end   
-    theta(m)=asin(parameters.ni/n(m)*sin(parameters.thetai));
+    theta(m)=asin(app.M_ni.Value/n(m)*sin(app.M_thetai.Value*pi/180));
 end
 %%%
 % cavity layer
-n(parameters.N_1+2)=parameters.nc;
-d(parameters.N_1+2)=parameters.dc;
-theta(parameters.N_1+2)=thetac;
+n(app.M_D1_N.Value+2)=app.M_nc.Value;
+d(app.M_D1_N.Value+2)=app.M_dc.Value;
+theta(app.M_D1_N.Value+2)=thetac;
 % DBR2
-for m = parameters.N_1+3:parameters.N_1+parameters.N_2+2
+for m = app.M_D1_N.Value+3:N+1
     if rem(m,2)==0
-        n(m)=parameters.n1; % may introduce disorder later
-        d(m)=parameters.d1; % may introduce disorder later
+        n(m)=app.M_D2_n1.Value; % may introduce disorder later
+        d(m)=app.M_D2_d1.Value; % may introduce disorder later
     else
-        n(m)=parameters.n2;
-        d(m)=parameters.d2;
+        n(m)=app.M_D2_n2.Value;
+        d(m)=app.M_D2_d2.Value;
     end   
-    theta(m)=asin(parameters.ni/n(m)*sin(parameters.thetai));
+    theta(m)=asin(app.M_ni.Value/n(m)*sin(app.M_thetai.Value*pi/180));
 end
 % final layer
-n(parameters.N_1+parameters.N_2+3)=parameters.nf;
-d(parameters.N_1+parameters.N_2+3)=0;
-theta(parameters.N_1+parameters.N_2+3)=thetaf;
+n(app.M_D1_N.Value+app.M_D2_N.Value+3)=app.M_nf.Value;
+d(app.M_D1_N.Value+app.M_D2_N.Value+3)=0;
+theta(app.M_D1_N.Value+app.M_D2_N.Value+3)=thetaf;
 %%%
 %% Total Number of layers
 MicrocavityS.n=n;
 MicrocavityS.d=d;
 MicrocavityS.theta=theta;
-MicrocavityS.N=parameters.N_1+parameters.N_2+1;
+MicrocavityS.N=N;
 end
