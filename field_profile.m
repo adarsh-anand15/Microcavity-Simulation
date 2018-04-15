@@ -1,19 +1,19 @@
-function field_profile(handles)
+function field_profile(app)
 %Field Profile of Microcavity%
 %% Initialization of various parameters
 %clear
 thetai=0; %angle of incidence
 %thetai=str2num(get(handles.thetai,'string'))*pi/180;%30*pi/180; %angle of incidence
-Ei=str2num(get(handles.Ei,'string'));% Initial Electric field amplitude
+Ei=app.M_Ei.Value;% Initial Electric field amplitude
 %thetaEi=str2num(get(handles.thetaEi,'string'));% Angle between Electric field and plane of incidence
-ni=str2num(get(handles.ni,'string'));%1; % initial medium
-nf=str2num(get(handles.nf,'string'));%1; % final medium
+ni=app.M_ni.Value;%1; % initial medium
+nf=app.M_nf.Value;%1; % final medium
 %N_1=str2num(get(handles.N_1,'string'));%11; % No. of layers for one DBR1
 %N_2=str2num(get(handles.N_2,'string'));%11; % No. of layers for one DBR2
-n1=str2num(get(handles.n1,'string'));% 2.02; % Refractive index of medium 1
-n2=str2num(get(handles.n2,'string'));%1.46; %Refractive index of medium 2
-nc= str2num(get(handles.nc,'string'));%n2; % Refractive index of medium of cavity
-LambdaC=str2num(get(handles.LambdaC,'string'));%530; % central wavelength
+n1=app.M_D1_n1.Value;% 2.02; % Refractive index of medium 1
+n2=app.M_D1_n2.Value;%1.46; %Refractive index of medium 2
+nc= app.M_nc.Value;%n2; % Refractive index of medium of cavity
+LambdaC=app.M_LambdaC.Value;%530; % central wavelength
 %ni=1; % initial medium
 %nf=1; % final medium
 N=43; % No. of layers for one DBR
@@ -27,6 +27,11 @@ N=43; % No. of layers for one DBR
 d1=LambdaC/(4*n1); % Thickness of layer 1
 d2=LambdaC/(4*n2); % Thickness of layer 2
 dc=LambdaC/(2*nc); % Thickness of cavity layer
+app.M_D1_d1.Value=d1;
+app.M_D1_d2.Value=d2;
+app.M_D2_d1.Value=d1;
+app.M_D2_d2.Value=d2;
+app.M_dc.Value=dc;
 theta1 = asin(ni/n1*sin(thetai)); % angle of propagation in the medium "1"
 theta2 = asin(ni/n2*sin(thetai)); % angle of propagation in the medium "2"
 thetac = asin(ni/nc*sin(thetai)); % angle of propagation in the cavity
@@ -150,7 +155,7 @@ for k=2:N
     Sk(2,1)=(rk/tk)*exp(-i*deltak);
     Sk(2,2)=(1/tk)*exp(-i*deltak);
     E(:,k)=inv(Sk)*E(:,k-1);
-    yk=real(E(1,k)*exp(-i*kp*xk)*exp(i*kp*l)+E(2,k)*exp(i*kp*xk)*exp(-i*kp*l));
+    yk=real(E(1,k)*exp(-1i*kp*xk)*exp(i*kp*l)+E(2,k)*exp(i*kp*xk)*exp(-i*kp*l));
     l=l+d(k);
     x=[x,xk];
     y=[y,yk];
@@ -162,12 +167,12 @@ kp=2*pi/LambdaC*nc;
 tfc=(2*n(N))/(n(N)+nc);
 rfc=(n(N)-nc)/(n(N)+nc);
 deltaN=((2*pi/LambdaC)*n(N)*d(N));
-Sfc(1,1)=(1/tfc)*exp(i*deltaN);
-Sfc(1,2)=(rfc/tfc)*exp(i*deltaN);
-Sfc(2,1)=(rfc/tfc)*exp(-i*deltaN);
-Sfc(2,2)=(1/tfc)*exp(-i*deltaN);
+Sfc(1,1)=(1/tfc)*exp(1i*deltaN);
+Sfc(1,2)=(rfc/tfc)*exp(1i*deltaN);
+Sfc(2,1)=(rfc/tfc)*exp(-1i*deltaN);
+Sfc(2,2)=(1/tfc)*exp(-1i*deltaN);
 Ec=inv(Sfc)*E(:,N);
-yc=real(Ec(1)*exp(-i*kp*xc)*exp(i*kp*l)+Ec(2)*exp(i*kp*xc)*exp(-i*kp*l));
+yc=real(Ec(1)*exp(-1i*kp*xc)*exp(1i*kp*l)+Ec(2)*exp(1i*kp*xc)*exp(-1i*kp*l));
 l=l+dc;
 x=[x,xc];
 y=[y,yc];
@@ -177,12 +182,12 @@ kp=2*pi/LambdaC*n(1);
 t1=(2*nc)/(nc+n(1));
 r1=(nc-n(1))/(nc+n(1));
 deltac=((2*pi/LambdaC)*nc*dc);
-Sc(1,1)=1/t1*exp(i*deltac);
-Sc(1,2)=r1/t1*exp(i*deltac);
-Sc(2,1)=r1/t1*exp(-i*deltac);
-Sc(2,2)=1/t1*exp(-i*deltac);
+Sc(1,1)=1/t1*exp(1i*deltac);
+Sc(1,2)=r1/t1*exp(1i*deltac);
+Sc(2,1)=r1/t1*exp(-1i*deltac);
+Sc(2,2)=1/t1*exp(-1i*deltac);
 E(:,1)=inv(Sc)*Ec;
-yk=real(E(1,1)*exp(-i*kp*xk)*exp(i*kp*l)+E(2,1)*exp(i*kp*xk)*exp(-i*kp*l));
+yk=real(E(1,1)*exp(-1i*kp*xk)*exp(1i*kp*l)+E(2,1)*exp(1i*kp*xk)*exp(-1i*kp*l));
 l=l+d(1);
 x=[x,xk];
 y=[y,yk];
@@ -193,12 +198,12 @@ for k=2:N
     tk=(2*n(k-1))/(n(k-1)+n(k));
     rk=(n(k-1)-n(k))/(n(k-1)+n(k));
     deltak=((2*pi/LambdaC)*n(k-1)*d(k-1));
-    Sk(1,1)=(1/tk)*exp(i*deltak);
-    Sk(1,2)=(rk/tk)*exp(i*deltak);
-    Sk(2,1)=(rk/tk)*exp(-i*deltak);
-    Sk(2,2)=(1/tk)*exp(-i*deltak);
+    Sk(1,1)=(1/tk)*exp(1i*deltak);
+    Sk(1,2)=(rk/tk)*exp(1i*deltak);
+    Sk(2,1)=(rk/tk)*exp(-1i*deltak);
+    Sk(2,2)=(1/tk)*exp(-1i*deltak);
     E(:,k)=inv(Sk)*E(:,k-1);
-    yk=real(E(1,k)*exp(-i*kp*xk)*exp(i*kp*l)+E(2,k)*exp(i*kp*xk)*exp(-i*kp*l));
+    yk=real(E(1,k)*exp(-1i*kp*xk)*exp(1i*kp*l)+E(2,k)*exp(1i*kp*xk)*exp(-1i*kp*l));
     l=l+d(k);
     x=[x,xk];
     y=[y,yk];
@@ -209,19 +214,22 @@ kp=2*pi/LambdaC*nf;
 tf=(2*n(N))/(n(N)+nf);
 rf=(n(N)-nf)/(n(N)+nf);
 deltaf=((2*pi/LambdaC)*n(N)*d(N));
-Sf(1,1)=(1/tf)*exp(i*deltaf);
-Sf(1,2)=(rf/tf)*exp(i*deltaf);
-Sf(2,1)=(rf/tf)*exp(-i*deltaf);
-Sf(2,2)=(1/tf)*exp(-i*deltaf);
+Sf(1,1)=(1/tf)*exp(1i*deltaf);
+Sf(1,2)=(rf/tf)*exp(1i*deltaf);
+Sf(2,1)=(rf/tf)*exp(-1i*deltaf);
+Sf(2,2)=(1/tf)*exp(-1i*deltaf);
 Ef=inv(Sf)*E(:,N);
-yf=real(Ef(1)*exp(-i*kp*xf)*exp(i*kp*l)+Ef(2)*exp(i*kp*xf)*exp(-i*kp*l));
+yf=real(Ef(1)*exp(-1i*kp*xf)*exp(1i*kp*l)+Ef(2)*exp(1i*kp*xf)*exp(-1i*kp*l));
 l=l+dc;
 x=[x,xf];
 y=[y,yf];
 %% plotting Result
-cla(handles.graph);
-hold on
-xlabel('x (nm)','fontweight','bold');
-ylabel('Electric Field (V/m)','fontweight','bold');
-plot(x,y);
+cla(app.graph_MCavity);
+hold(app.graph_MCavity);
+title(app.graph_MCavity,'Electric Field Profile');
+xlabel(app.graph_MCavity,'x (nm)','fontweight','bold');
+ylabel(app.graph_MCavity,'Electric Field (V/m)','fontweight','bold');
+plot(app.graph_MCavity,x,y);
+hold(app.graph_MCavity);
+clc;
 end
