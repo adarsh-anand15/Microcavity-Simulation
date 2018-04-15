@@ -6,7 +6,7 @@ n=MicrocavityS.n;
 d=MicrocavityS.d;
 theta=MicrocavityS.theta;
 N=MicrocavityS.N;
-for z=1:nLambda+1;
+for z=1:nLambda
         Ss(:,:,z)=eye(2);
         Sp(:,:,z)=eye(2);
 end
@@ -28,7 +28,7 @@ for m=1:N+1
     Smp(1,2,:)=(rmp/tmp)*exp(1i*deltam);
     Smp(2,1,:)=(rmp/tmp)*exp(-1i*deltam);
     Smp(2,2,:)=(1/tmp)*exp(-1i*deltam);
-    for z=1:nLambda+1
+    for z=1:nLambda
         Ss(:,:,z)=Ss(:,:,z)*Sms(:,:,z);
         Sp(:,:,z)=Sp(:,:,z)*Smp(:,:,z);
     end
