@@ -1,6 +1,6 @@
-function [Rs,Rp]=Reflectivity_calc(MicrocavityS,Lambda,nLambda)
+function [Rs,Rp]=Reflectivity_calc(StackS,Lambda,nLambda)
 %% Finding Characteristic matrices
-[ Ss,Sp ] = CMatrices(MicrocavityS,Lambda,nLambda );
+[ Ss,Sp ] = CMatrices(StackS,Lambda,nLambda );
 %% Reflectivity calculation
 rs=Ss(2,1,:)./Ss(1,1,:);
 rp=Sp(2,1,:)./Sp(1,1,:);

@@ -3,7 +3,7 @@ function paraM=getdataM(app)
 %% general
 paraM.thetai=app.M_thetai.Value*pi/180;%30*pi/180; %angle of incidence
 paraM.Ei=app.M_Ei.Value;% Initial Electric field amplitude
-paraM.thetaEi=app.M_thetaEi.Value;% Angle between Electric field and plane of incidence
+paraM.thetaEi=app.M_thetaEi.Value*pi/180;% Angle between Electric field and plane of incidence
 paraM.ni=app.M_ni.Value;%1; % initial medium
 paraM.nf=app.M_nf.Value;%1; % final medium
 paraM.LambdaC=app.M_LambdaC.Value; %530; % central wavelength
