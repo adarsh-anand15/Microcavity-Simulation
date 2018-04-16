@@ -15,7 +15,8 @@ DeltaLambda=400; % Observed range of wavelength around central wavelength
 MicrocavityS=DSMicrocavity(app);
 %%%
 %% find resonance wavelength
-%[~,LambdaCRp]=Lambda_Resonance(MicrocavityS,LambdaCtheta);
+clc;
+[LambdaCRs,LambdaCRp]=Lambda_Resonance(MicrocavityS,LambdaCtheta)
 Lambda = app.M_LambdaC.Value-DeltaLambda/2:0.5:LambdaCtheta; % Array of wavelength points for entire range
 Lambda=[Lambda,LambdaCtheta:0.004:LambdaCtheta+25];
 Lambda=[Lambda,LambdaCtheta+25:0.5:app.M_LambdaC.Value+DeltaLambda/2];
@@ -29,8 +30,9 @@ hold(app.graph_MCavity);
 title(app.graph_MCavity,'Reflectivity vs Wavelength of a Microcavity');
 xlabel(app.graph_MCavity,'Wavelength (nm)','fontweight','bold');
 ylabel(app.graph_MCavity,'Reflectance','fontweight','bold');
-plot(app.graph_MCavity,Lambda,Rp,'r-');
 plot(app.graph_MCavity,Lambda,Rs,'b-');
+plot(app.graph_MCavity,Lambda,Rp,'r-');
+legend(app.graph_MCavity,'s-Polarization','p-Polarization' );
 hold(app.graph_MCavity);
 %clc;
 %set(graph1,'LineWidth',1);
