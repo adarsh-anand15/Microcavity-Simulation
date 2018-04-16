@@ -15,8 +15,8 @@ DeltaLambda=400; % Observed range of wavelength around central wavelength
 MicrocavityS=DSMicrocavity(app);
 %%%
 %% find resonance wavelength
-clc;
-[LambdaCRs,LambdaCRp]=Lambda_Resonance(MicrocavityS,LambdaCtheta)
+%clc;
+%[LambdaCRs,LambdaCRp]=Lambda_Resonance(MicrocavityS,LambdaCtheta)
 Lambda = app.M_LambdaC.Value-DeltaLambda/2:0.5:LambdaCtheta; % Array of wavelength points for entire range
 Lambda=[Lambda,LambdaCtheta:0.004:LambdaCtheta+25];
 Lambda=[Lambda,LambdaCtheta+25:0.5:app.M_LambdaC.Value+DeltaLambda/2];
