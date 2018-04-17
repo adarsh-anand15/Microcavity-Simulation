@@ -16,7 +16,7 @@ Lambda=[Lambda,LambdaCtheta:0.004:LambdaCtheta+25];
 Lambda=[Lambda,LambdaCtheta+25:0.5:paraM.LambdaC+DeltaLambda/2];
 nLambda=numel(Lambda);
 %% Calculation of Reflectivity
-[Rs,Rp,R]=Reflectivity_calc(MicrocavityS,Lambda,nLambda);
+[Rs,Rp,R]=Reflectivity_calc(MicrocavityS,Lambda,nLambda,paraM.thetaEi);
 %% Plotting Result
 clc;
 cla(app.graph_MCavity);

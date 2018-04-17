@@ -9,19 +9,23 @@ LambdaC=paraM.LambdaC;
 %% defining structure
 MicrocavityS=DS_Microcavity(paraM);
 t=0;
+[~,y]=Stack_field_profile(MicrocavityS,LambdaC,paraM.Ei,t);
+ymax=max(y)+20;
+hold(app.graph_MCavity,'on');
+ylim(app.graph_MCavity,[-ymax ymax]);
 while app.M_state.Value==1
     %% getting field profile
     [x,y]=Stack_field_profile(MicrocavityS,LambdaC,paraM.Ei,t);
     t=t+0.1;
     %% plot
-    %hold(app.graph_MCavity,'on');
-    ylim(app.graph_MCavity,[-200 200]);
+    cla(app.graph_MCavity);
     title(app.graph_MCavity,'Electric Field Profile of a Microcavity');
     xlabel(app.graph_MCavity,'x (nm)','fontweight','bold');
     ylabel(app.graph_MCavity,'Electric Field (V/m)','fontweight','bold');
     plot(app.graph_MCavity,x,y,'g-');
     pause(0.1);
 end
+hold(app.graph_MCavity,'off');
 app.M_thetai.Value=30;
 app.M_thetaEi.Value=45;
 end

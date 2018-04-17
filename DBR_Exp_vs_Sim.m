@@ -8,7 +8,7 @@ nLambda=numel(Lambda);
 %% defining structure for Microcavity
 DBRS=DS_DBR(paraD);
 %% Calculation of Reflectivity
-[~,~,R]=Reflectivity_calc(DBRS,Lambda,nLambda);
+[~,~,R]=Reflectivity_calc(DBRS,Lambda,nLambda,paraD.thetaEi);
 %% Plotting Result
 x=xlsread('zone 9 12','1304102U1_01','A7:A2738');
 y=xlsread('zone 9 12','1304102U1_01','B7:B2738');

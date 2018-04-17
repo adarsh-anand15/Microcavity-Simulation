@@ -10,7 +10,7 @@ for z=1:n
     app.M_thetai.Value=paraM.thetai*180/pi;
     LambdaCtheta=paraM.LambdaC*sqrt(1-paraM.ni^2*(sin(paraM.thetai))^2/paraM.nc^2);
     MicrocavityS=DS_Microcavity(paraM);
-    [LambdaCRs(z),LambdaCRp(z),LambdaCR(z)]=Lambda_Resonance(MicrocavityS,LambdaCtheta);
+    [LambdaCRs(z),LambdaCRp(z),LambdaCR(z)]=Lambda_Resonance(MicrocavityS,LambdaCtheta,paraM.thetaEi);
 end
 cla(app.graph_MCavity);
 hold(app.graph_MCavity);

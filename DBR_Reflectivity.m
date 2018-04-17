@@ -7,7 +7,7 @@ nLambda=numel(Lambda);
 %% defining structure for Microcavity
 DBRS=DS_DBR(paraD);
 %% Calculation of Reflectivity
-[Rs,Rp,R]=Reflectivity_calc(DBRS,Lambda,nLambda);
+[Rs,Rp,R]=Reflectivity_calc(DBRS,Lambda,nLambda,paraD.thetaEi);
 %% Plotting Result
 clc;
 cla(app.graph_DBR);
