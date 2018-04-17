@@ -16,6 +16,9 @@ while app.M_state.Value==1
     %% plot
     %hold(app.graph_MCavity,'on');
     ylim(app.graph_MCavity,[-200 200]);
+    title(app.graph_MCavity,'Electric Field Profile of a Microcavity');
+    xlabel(app.graph_MCavity,'x (nm)','fontweight','bold');
+    ylabel(app.graph_MCavity,'Electric Field (V/m)','fontweight','bold');
     plot(app.graph_MCavity,x,y,'g-');
     pause(0.1);
 end

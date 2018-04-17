@@ -16,6 +16,9 @@ while app.D_state.Value==1
     %% plot
     %hold(app.graph_MCavity,'on');
     ylim(app.graph_DBR,[-12 12]);
+    title(app.graph_DBR,'Electric Field Profile of a DBR');
+    xlabel(app.graph_DBR,'x (nm)','fontweight','bold');
+    ylabel(app.graph_DBR,'Electric Field (V/m)','fontweight','bold');
     plot(app.graph_DBR,x,y,'g-');
     pause(0.1);
 end
