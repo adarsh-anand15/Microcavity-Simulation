@@ -14,6 +14,7 @@ for z=1:n
 end
 cla(app.graph_MCavity);
 hold(app.graph_MCavity);
+ylim(app.graph_MCavity,'auto');
 title(app.graph_MCavity,'LambdaC vs theta');
 xlabel(app.graph_MCavity,'Angle of Incidence(Radians)','fontweight','bold');
 ylabel(app.graph_MCavity,'Resonance Wavelength (nm)','fontweight','bold');

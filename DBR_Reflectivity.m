@@ -12,7 +12,8 @@ R=Rs.*(sin(paraD.thetaEi))^2+Rp.*(cos(paraD.thetaEi))^2;
 %% Plotting Result
 clc;
 cla(app.graph_DBR);
-hold(app.graph_DBR);
+hold(app.graph_DBR,'on');
+ylim(app.graph_DBR,'auto');
 title(app.graph_DBR,'Reflectivity vs Wavelength of a DBR');
 xlabel(app.graph_DBR,'Wavelength (nm)','fontweight','bold');
 ylabel(app.graph_DBR,'Reflectivity','fontweight','bold');
@@ -20,5 +21,5 @@ plot(app.graph_DBR,Lambda,Rs,'b-');
 plot(app.graph_DBR,Lambda,Rp,'r-');
 plot(app.graph_DBR,Lambda,R,'g-');
 legend(app.graph_DBR,'s-Polarization','p-Polarization','Total' );
-hold(app.graph_DBR);
+hold(app.graph_DBR,'off');
 end

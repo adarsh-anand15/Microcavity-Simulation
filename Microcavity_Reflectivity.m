@@ -20,7 +20,8 @@ nLambda=numel(Lambda);
 %% Plotting Result
 clc;
 cla(app.graph_MCavity);
-hold(app.graph_MCavity);
+hold(app.graph_MCavity,'on');
+ylim(app.graph_MCavity,'auto');
 title(app.graph_MCavity,'Reflectivity vs Wavelength of a Microcavity');
 xlabel(app.graph_MCavity,'Wavelength (nm)','fontweight','bold');
 ylabel(app.graph_MCavity,'Reflectivity','fontweight','bold');
@@ -28,5 +29,5 @@ plot(app.graph_MCavity,Lambda,Rs,'b-');
 plot(app.graph_MCavity,Lambda,Rp,'r-');
 plot(app.graph_MCavity,Lambda,R,'g-');
 legend(app.graph_MCavity,'s-Polarization','p-Polarization','Total' );
-hold(app.graph_MCavity);
+hold(app.graph_MCavity,'off');
 end

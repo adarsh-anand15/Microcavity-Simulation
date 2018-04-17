@@ -27,6 +27,7 @@ for z=1:n
 end
 cla(app.graph_MCavity);
 hold(app.graph_MCavity);
+ylim(app.graph_MCavity,'auto');
 title(app.graph_MCavity,'Energy vs k(parallel)');
 xlabel(app.graph_MCavity,'k(parallel) (nm^-1)','fontweight','bold');
 ylabel(app.graph_MCavity,'Energy(J)','fontweight','bold');
