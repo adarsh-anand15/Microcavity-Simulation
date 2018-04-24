@@ -28,6 +28,6 @@ ylabel(app.graph_MCavity,'Reflectivity','fontweight','bold');
 plot(app.graph_MCavity,Lambda,Rs,'b-');
 plot(app.graph_MCavity,Lambda,Rp,'r-');
 plot(app.graph_MCavity,Lambda,R,'g-');
-legend(app.graph_MCavity,'s-Polarization','p-Polarization','Total' );
+legend(app.graph_MCavity,'s-Polarization','p-Polarization','General Polarization' );
 hold(app.graph_MCavity,'off');
 end

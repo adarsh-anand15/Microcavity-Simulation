@@ -22,7 +22,7 @@ while app.D_state.Value==1
     plot(app.graph_DBR,x,y,'g-');
     pause(0.1);
 end
-hold(app.graph_MCavity,'off');
+%hold(app.graph_DBR,'off');
 app.D_thetai.Value=30;
 app.D_thetaEi.Value=45;
 end

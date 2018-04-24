@@ -1,4 +1,11 @@
 function DBR_Exp_vs_Sim(app)
+%% getting experimental data
+x=xlsread('zone 9 12','1304102U1_01','A7:A2738');
+y=xlsread('zone 9 12','1304102U1_01','B7:B2738');
+y=y./100;
+[ymax,ymaxI]=max(y);
+y=y./ymax;
+app.D_LambdaC.Value=x(ymaxI);
 %% Initialization of various parameters
 app.D_thetai.Value=0;
 paraD=getdataD(app); % getting the parameters from GUI
@@ -10,10 +17,8 @@ DBRS=DS_DBR(paraD);
 %% Calculation of Reflectivity
 [~,~,R]=Reflectivity_calc(DBRS,Lambda,nLambda,paraD.thetaEi);
 %% Plotting Result
-x=xlsread('zone 9 12','1304102U1_01','A7:A2738');
-y=xlsread('zone 9 12','1304102U1_01','B7:B2738');
-y=y./100;
-%y=y-0.4;
+
+
 clc;
 cla(app.graph_DBR);
 hold(app.graph_DBR,'on');
