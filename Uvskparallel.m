@@ -1,6 +1,6 @@
 function Uvskparallel(app)
 paraM=getdataM(app); % getting the parameters from GUI
-theta=0:2*pi/180:60*pi/180;
+theta=-60*pi/180:2*pi/180:60*pi/180;
 n=numel(theta);
 LambdaCRs=zeros(1,n);
 LambdaCRp=zeros(1,n);
@@ -33,8 +33,8 @@ xlabel(app.graph_MCavity,'k(parallel) (nm^-1)','fontweight','bold');
 ylabel(app.graph_MCavity,'Energy(J)','fontweight','bold');
 plot(app.graph_MCavity,kparallels,Us,'r-');
 plot(app.graph_MCavity,kparallelp,Up,'b-');
-plot(app.graph_MCavity,kparallel,U,'g-');
-legend(app.graph_MCavity,'s-Polarization','p-Polarization','Total' );
+%plot(app.graph_MCavity,kparallel,U,'g-');
+legend(app.graph_MCavity,'s-Polarization','p-Polarization' );
 hold(app.graph_MCavity);
 end
 

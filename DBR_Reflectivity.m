@@ -19,6 +19,7 @@ ylabel(app.graph_DBR,'Reflectivity','fontweight','bold');
 plot(app.graph_DBR,Lambda,Rs,'b-');
 plot(app.graph_DBR,Lambda,Rp,'r-');
 plot(app.graph_DBR,Lambda,R,'g-');
-legend(app.graph_DBR,'s-Polarization','p-Polarization','Total' );
+legend(app.graph_DBR,'s-Polarization','p-Polarization','General Polarization' );
 hold(app.graph_DBR,'off');
+
 end
