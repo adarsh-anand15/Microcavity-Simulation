@@ -10,13 +10,19 @@ LambdaC=paraD.LambdaC;
 DBRS=DS_DBR(paraD);
 %% setting axes
 c=physconst('LightSpeed');
-t=0;
-[~,y]=Stack_field_profile(DBRS,LambdaC,paraD.Ei,LambdaC/(4*c));
-ymin=min(y);
-ymax=max(y);
+ymin=0;
+ymax=0;
+for t = 0:0.1*LambdaC/(4*c):LambdaC/(4*c)
+[~,y]=Stack_field_profile(DBRS,LambdaC,paraD.Ei,t);
+ymint=min(y);
+ymaxt=max(y);
+ymin=min(ymin,ymint);
+ymax=max(ymax,ymaxt);
+end
 ylimit=max(ymax,abs(ymin));
 hold(app.graph_DBR,'on');
 ylim(app.graph_DBR,[-ylimit ylimit]);
+t=0;
 while app.D_state.Value==1
     %% getting field profile
     [x,y]=Stack_field_profile(DBRS,LambdaC,paraD.Ei,t);
@@ -29,7 +35,7 @@ while app.D_state.Value==1
     title(app.graph_DBR,'Electric Field Profile of a DBR');
     xlabel(app.graph_DBR,'x (nm)','fontweight','bold');
     ylabel(app.graph_DBR,'Electric Field (V/m)','fontweight','bold');
-    plot(app.graph_DBR,x,y,'g-');
+    plot(app.graph_DBR,x,y,'b-');
     legend(app.graph_DBR,leg);
     pause(0.1);
 end

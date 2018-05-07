@@ -10,17 +10,23 @@ LambdaC=paraM.LambdaC;
 MicrocavityS=DS_Microcavity(paraM);
 %% setting axes
 c=physconst('LightSpeed');
-t=0;
-[~,y]=Stack_field_profile(MicrocavityS,LambdaC,paraM.Ei,0);
-ymin=min(y);
-ymax=max(y);
+ymin=0;
+ymax=0;
+for t = 0:0.1*LambdaC/(4*c*paraM.nc):LambdaC/(c*paraM.nc)
+[~,y]=Stack_field_profile(MicrocavityS,LambdaC,paraM.Ei,t);
+ymint=min(y);
+ymaxt=max(y);
+ymin=min(ymin,ymint);
+ymax=max(ymax,ymaxt);
+end
 ylimit=max(ymax,abs(ymin));
 hold(app.graph_MCavity,'on');
 ylim(app.graph_MCavity,[-ylimit ylimit]);
+t=0;
 while app.M_state.Value==1
     %% getting field profile
     [x,y]=Stack_field_profile(MicrocavityS,LambdaC,paraM.Ei,t);
-    t=t+0.15*LambdaC/(4*c*paraM.nc);
+    t=t+0.1*LambdaC/(4*c*paraM.nc);
     tleg=t*4*c*paraM.nc/(LambdaC);
     tlegs=[num2str(tleg,'%.2f'),'*LambdaC/(4c)'];
     leg = ['t = ',tlegs];
@@ -29,7 +35,7 @@ while app.M_state.Value==1
     title(app.graph_MCavity,'Electric Field Profile of a Microcavity');
     xlabel(app.graph_MCavity,'x (nm)','fontweight','bold');
     ylabel(app.graph_MCavity,'Electric Field (V/m)','fontweight','bold');
-    plot(app.graph_MCavity,x,y,'g-');
+    plot(app.graph_MCavity,x,y,'b-');
     legend(app.graph_MCavity,leg);
     pause(0.1);
 end

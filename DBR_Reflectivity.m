@@ -9,7 +9,7 @@ DBRS=DS_DBR(paraD);
 %% Calculation of Reflectivity
 [Rs,Rp,R]=Reflectivity_calc(DBRS,Lambda,nLambda,paraD.thetaEi);
 %% Plotting Result
-clc;
+%clc;
 cla(app.graph_DBR);
 hold(app.graph_DBR,'on');
 ylim(app.graph_DBR,'auto');
@@ -19,7 +19,7 @@ ylabel(app.graph_DBR,'Reflectivity','fontweight','bold');
 plot(app.graph_DBR,Lambda,Rs,'b-');
 plot(app.graph_DBR,Lambda,Rp,'r-');
 plot(app.graph_DBR,Lambda,R,'g-');
-legend(app.graph_DBR,'s-Polarization','p-Polarization','General Polarization' );
+legend(app.graph_DBR,'s-Polarization','p-Polarization','Given Polarization' );
 hold(app.graph_DBR,'off');
 
 end

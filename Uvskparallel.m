@@ -21,15 +21,15 @@ kparallels=zeros(1,n);
 kparallelp=zeros(1,n);
 kparallel=zeros(1,n);
 for z=1:n
-    kparallels(z)=2*pi*sin(theta(z))/LambdaCRs(z);
-    kparallelp(z)=2*pi*sin(theta(z))/LambdaCRp(z);
-    kparallel(z)=2*pi*sin(theta(z))/LambdaCR(z);
+    kparallels(z)=2*pi*1000*sin(theta(z))/LambdaCRs(z);
+    kparallelp(z)=2*pi*1000*sin(theta(z))/LambdaCRp(z);
+    kparallel(z)=2*pi*1000*sin(theta(z))/LambdaCR(z);
 end
 cla(app.graph_MCavity);
 hold(app.graph_MCavity);
 ylim(app.graph_MCavity,'auto');
-title(app.graph_MCavity,'Energy vs k(parallel)');
-xlabel(app.graph_MCavity,'k(parallel) (nm^-1)','fontweight','bold');
+title(app.graph_MCavity,'Energy vs k_{||}');
+xlabel(app.graph_MCavity,'k_{||} (\mum^{-1})','fontweight','bold');
 ylabel(app.graph_MCavity,'Energy(J)','fontweight','bold');
 plot(app.graph_MCavity,kparallels,Us,'r-');
 plot(app.graph_MCavity,kparallelp,Up,'b-');

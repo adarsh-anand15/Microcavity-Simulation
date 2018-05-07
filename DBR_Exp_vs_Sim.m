@@ -4,7 +4,8 @@ x=xlsread('zone 9 12','1304102U1_01','A7:A2738');
 y=xlsread('zone 9 12','1304102U1_01','B7:B2738');
 y=y./100;
 [ymax,ymaxI]=max(y);
-y=y./ymax;
+
+y=y./(ymax);
 app.D_LambdaC.Value=x(ymaxI);
 %% Initialization of various parameters
 app.D_thetai.Value=0;
@@ -19,7 +20,7 @@ DBRS=DS_DBR(paraD);
 %% Plotting Result
 
 
-clc;
+%clc;
 cla(app.graph_DBR);
 hold(app.graph_DBR,'on');
 ylim(app.graph_DBR,'auto');

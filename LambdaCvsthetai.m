@@ -16,7 +16,7 @@ end
 cla(app.graph_MCavity);
 hold(app.graph_MCavity,'on');
 ylim(app.graph_MCavity,'auto');
-title(app.graph_MCavity,'Lambda_Resonance vs theta');
+title(app.graph_MCavity,'Resonance Wavelength vs Angle of incidence');
 xlabel(app.graph_MCavity,'Angle of Incidence(degrees)','fontweight','bold');
 ylabel(app.graph_MCavity,'Resonance Wavelength (nm)','fontweight','bold');
 plot(app.graph_MCavity,theta_deg,LambdaCRs,'r-');

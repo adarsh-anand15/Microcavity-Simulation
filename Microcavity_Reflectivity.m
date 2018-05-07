@@ -4,7 +4,7 @@ function Microcavity_Reflectivity(app)
 paraM=getdataM(app); % getting the parameters from GUI
 LambdaCtheta=paraM.LambdaC*sqrt(1-paraM.ni^2*(sin(paraM.thetai))^2/paraM.nc^2);
 %LambdaCtheta=app.M_LambdaC.Value*sqrt(1-app.M_ni.Value^2*(sin(app.M_thetai.Value*pi/180))^2/app.M_nc.Value^2);
-DeltaLambda=400; % Observed range of wavelength around central wavelength
+DeltaLambda=300; % Observed range of wavelength around central wavelength
 %% defining structure for Microcavity
 MicrocavityS=DS_Microcavity(paraM);
 %% find resonance wavelength
@@ -28,6 +28,22 @@ ylabel(app.graph_MCavity,'Reflectivity','fontweight','bold');
 plot(app.graph_MCavity,Lambda,Rs,'b-');
 plot(app.graph_MCavity,Lambda,Rp,'r-');
 plot(app.graph_MCavity,Lambda,R,'g-');
-legend(app.graph_MCavity,'s-Polarization','p-Polarization','General Polarization' );
+legend(app.graph_MCavity,'s-Polarization','p-Polarization','Given Polarization' );
 hold(app.graph_MCavity,'off');
+%%
+%{
+hold('on');
+ylim('auto');
+title('Reflectivity vs Wavelength of a Microcavity');
+xlabel('Wavelength (nm)','fontweight','bold');
+ylabel('Reflectivity','fontweight','bold');
+subplot(1,3,1) ;
+plot(Lambda,Rs,'b-');
+subplot(1,3,1); 
+plot(Lambda,Rp,'r-');
+subplot(1,3,1) ;
+plot(Lambda,R,'g-');
+legend('s-Polarization','p-Polarization','Given Polarization' );
+hold('off');
+%}
 end
