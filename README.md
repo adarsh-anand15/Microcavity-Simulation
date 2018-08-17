@@ -1,5 +1,7 @@
 Description:
 This Application simulates the behaviour of a Distributed Bragg Reflector and a Microcavity made of two DBRs.
+It can give Reflectance profile, and Electric field profile for a single DBR as well as a Microcavirt made of two DBRs.
+It also simulates Energy Band Dispersion Relation for a bare Microcavity.
 Requirements:
 You will need MATLAB 2017a or higher to run this app.
 Steps to Run:
