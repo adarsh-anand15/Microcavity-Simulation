@@ -1,3 +1,7 @@
+© Adarsh Anand
+
+Author retains the copyright to this app. You are free to use this code as long as appropriate credit is provided to the original author in any published work with the help of this code. You can distribute the code to others as long as a copy of this copyright notice is included.
+
 Description:  
 This Application simulates the behaviour of a Distributed Bragg Reflector and a Microcavity made of two DBRs.  
 It can give Reflectance profile, and Electric field profile for a single DBR as well as a Microcavirt made of two DBRs.  
