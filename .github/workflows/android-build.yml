@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            git zip unzip autoconf libtool pkg-config \
+            git zip unzip autoconf automake libtool pkg-config \
             zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev \
             build-essential ccache
 
@@ -43,7 +43,7 @@ jobs:
           path: |
             ~/.buildozer
             android_app/.buildozer
-          key: buildozer-${{ runner.os }}-${{ hashFiles('android_app/buildozer.spec') }}
+          key: buildozer-${{ runner.os }}-${{ hashFiles('android_app/buildozer.spec', '.github/workflows/android-build.yml') }}
 
       - name: Build debug APK
         working-directory: android_app
