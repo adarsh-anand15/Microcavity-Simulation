@@ -48,7 +48,7 @@ jobs:
       - name: Build debug APK
         working-directory: android_app
         env:
-          PIP_CONSTRAINT: pip-constraints.txt
+          PIP_CONSTRAINT: ${{ github.workspace }}/android_app/pip-constraints.txt
         run: buildozer -v android debug
 
       - name: Upload APK artifact
