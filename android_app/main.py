@@ -32,32 +32,67 @@ R_COLOR = (0.30, 0.85, 0.35, 1)
 
 
 class PlotWidget(Widget):
-    """Draws one or more (x, y, rgba) curves scaled to fill the widget."""
+    """Draws one or more (x, y, rgba) curves scaled to fill the widget.
+
+    Curves are decimated to roughly one point per pixel of width before
+    building the Line instruction: some curves (the microcavity reflectivity
+    dip, field-profile snapshots) carry tens of thousands of points because
+    the underlying physics needs that resolution numerically, but handing
+    that many vertices to Kivy's Line every redraw is what made those plots
+    render badly / stall on-device - a phone screen can't show more detail
+    than its own pixel width anyway.
+    """
+
+    MAX_RENDER_POINTS = 1500
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.curves = []
+        self.x_range = None
+        self.y_range = None
         self.bind(pos=self.redraw, size=self.redraw)
 
-    def set_curves(self, curves):
+    def set_curves(self, curves, x_range=None, y_range=None):
+        """x_range/y_range: optional fixed (min, max) pairs, e.g. so an
+        animation's axes don't jitter/rescale on every frame."""
         self.curves = curves
+        self.x_range = x_range
+        self.y_range = y_range
         self.redraw()
+
+    @staticmethod
+    def _decimate(x, y, max_points):
+        if len(x) <= max_points:
+            return x, y
+        idx = np.linspace(0, len(x) - 1, max_points).astype(int)
+        return x[idx], y[idx]
 
     def redraw(self, *args):
         self.canvas.clear()
         if not self.curves or self.width < 2 or self.height < 2:
             return
-        all_x = np.concatenate([c[0] for c in self.curves])
-        all_y = np.concatenate([c[1] for c in self.curves])
-        xmin, xmax = float(np.min(all_x)), float(np.max(all_x))
-        ymin, ymax = float(np.min(all_y)), float(np.max(all_y))
-        if xmax == xmin:
-            xmax = xmin + 1
-        if ymax == ymin:
-            ymin, ymax = ymin - 1, ymax + 1
-        yr = ymax - ymin
-        ymin -= yr * 0.05
-        ymax += yr * 0.05
+        max_points = max(int(self.width), 300)
+        curves = [(*self._decimate(np.asarray(x), np.asarray(y), max_points), color)
+                  for x, y, color in self.curves]
+
+        if self.x_range:
+            xmin, xmax = self.x_range
+        else:
+            all_x = np.concatenate([c[0] for c in curves])
+            xmin, xmax = float(np.min(all_x)), float(np.max(all_x))
+            if xmax == xmin:
+                xmax = xmin + 1
+
+        if self.y_range:
+            ymin, ymax = self.y_range
+        else:
+            all_y = np.concatenate([c[1] for c in curves])
+            ymin, ymax = float(np.min(all_y)), float(np.max(all_y))
+            if ymax == ymin:
+                ymin, ymax = ymin - 1, ymax + 1
+            yr = ymax - ymin
+            ymin -= yr * 0.05
+            ymax += yr * 0.05
 
         x0, y0 = self.pos
         w, h = self.size
@@ -68,9 +103,9 @@ class PlotWidget(Widget):
                 zy = y0 + (0 - ymin) / (ymax - ymin) * h
                 Color(0.4, 0.4, 0.4, 1)
                 Line(points=[x0, zy, x0 + w, zy], width=1)
-            for x, y, color in self.curves:
-                px = x0 + (np.asarray(x) - xmin) / (xmax - xmin) * w
-                py = y0 + (np.asarray(y) - ymin) / (ymax - ymin) * h
+            for x, y, color in curves:
+                px = x0 + (x - xmin) / (xmax - xmin) * w
+                py = y0 + (y - ymin) / (ymax - ymin) * h
                 pts = np.empty(len(x) * 2)
                 pts[0::2] = px
                 pts[1::2] = py
@@ -206,13 +241,27 @@ class DBRTab(SimTab):
             self.Ei = p['Ei']
             self.t = 0.0
             self.dt = 0.1 * self.lambda_c / (4 * physics.LIGHT_SPEED)
+            self.field_x_range, self.field_y_range = self._field_axis_ranges(11)
             self.field_event = Clock.schedule_interval(self._field_tick, 1 / 15)
         else:
             self.stop_animation()
 
+    def _field_axis_ranges(self, n_samples):
+        """Fixed x/y ranges sampled over one period, so the plot doesn't
+        rescale/jitter every animation frame (matches the original app,
+        which computed a fixed ylim before starting the field-profile loop)."""
+        ymax = 0.0
+        xmin = xmax = None
+        for i in range(n_samples):
+            x, y = physics.stack_field_profile(self.stack, self.lambda_c, self.Ei, i * self.dt)
+            ymax = max(ymax, float(np.max(np.abs(y))))
+            if xmin is None:
+                xmin, xmax = float(np.min(x)), float(np.max(x))
+        return (xmin, xmax), (-ymax * 1.05, ymax * 1.05)
+
     def _field_tick(self, _dt):
         x, y = physics.stack_field_profile(self.stack, self.lambda_c, self.Ei, self.t)
-        self.plot.set_curves([(x, y, S_COLOR)])
+        self.plot.set_curves([(x, y, S_COLOR)], x_range=self.field_x_range, y_range=self.field_y_range)
         frac = self.t * 4 * physics.LIGHT_SPEED / self.lambda_c
         self.status.text = f'Electric Field Profile   t = {frac:.2f} * LambdaC/(4c)'
         self.t += self.dt
@@ -260,13 +309,24 @@ class MicrocavityTab(SimTab):
             self.nc = p['nc']
             self.t = 0.0
             self.dt = 0.1 * self.lambda_c / (4 * physics.LIGHT_SPEED * self.nc)
+            self.field_x_range, self.field_y_range = self._field_axis_ranges(41)
             self.field_event = Clock.schedule_interval(self._field_tick, 1 / 15)
         else:
             self.stop_animation()
 
+    def _field_axis_ranges(self, n_samples):
+        ymax = 0.0
+        xmin = xmax = None
+        for i in range(n_samples):
+            x, y = physics.stack_field_profile(self.stack, self.lambda_c, self.Ei, i * self.dt)
+            ymax = max(ymax, float(np.max(np.abs(y))))
+            if xmin is None:
+                xmin, xmax = float(np.min(x)), float(np.max(x))
+        return (xmin, xmax), (-ymax * 1.05, ymax * 1.05)
+
     def _field_tick(self, _dt):
         x, y = physics.stack_field_profile(self.stack, self.lambda_c, self.Ei, self.t)
-        self.plot.set_curves([(x, y, S_COLOR)])
+        self.plot.set_curves([(x, y, S_COLOR)], x_range=self.field_x_range, y_range=self.field_y_range)
         frac = self.t * 4 * physics.LIGHT_SPEED * self.nc / self.lambda_c
         self.status.text = f'Electric Field Profile   t = {frac:.2f} * LambdaC/(4c)'
         self.t += self.dt
