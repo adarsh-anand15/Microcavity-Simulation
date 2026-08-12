@@ -13,6 +13,7 @@ import numpy as np
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.graphics import Color, Line
+from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
@@ -78,17 +79,20 @@ class PlotWidget(Widget):
 
 
 def labeled_field(label_text, default):
-    row = BoxLayout(size_hint_y=None, height=34, spacing=6)
-    row.add_widget(Label(text=label_text, size_hint_x=0.62, halign='left', valign='middle'))
-    ti = TextInput(text=str(default), multiline=False, size_hint_x=0.38,
-                    input_filter='float', write_tab=False)
+    row = BoxLayout(size_hint_y=None, height=dp(40), spacing=dp(4))
+    lbl = Label(text=label_text, size_hint_x=0.58, halign='left', valign='middle',
+                font_size='12sp', shorten=True, shorten_from='right')
+    lbl.bind(size=lbl.setter('text_size'))
+    row.add_widget(lbl)
+    ti = TextInput(text=str(default), multiline=False, size_hint_x=0.42,
+                    input_filter='float', write_tab=False, font_size='13sp')
     row.add_widget(ti)
     return row, ti
 
 
 class ParamForm(GridLayout):
     def __init__(self, fields, **kwargs):
-        super().__init__(cols=1, size_hint_y=None, spacing=2, padding=6, **kwargs)
+        super().__init__(cols=1, size_hint_y=None, spacing=dp(3), padding=dp(6), **kwargs)
         self.bind(minimum_height=self.setter('height'))
         self.inputs = {}
         for key, label_text, default in fields:
@@ -143,18 +147,20 @@ class SimTab(BoxLayout):
     """Shared layout: left scrollable param form, right plot + controls."""
 
     def __init__(self, fields, **kwargs):
-        super().__init__(orientation='horizontal', spacing=6, padding=6, **kwargs)
+        super().__init__(orientation='horizontal', spacing=dp(6), padding=dp(6), **kwargs)
         self.form = ParamForm(fields)
-        scroller = ScrollView(size_hint=(None, 1), width=260)
+        scroller = ScrollView(size_hint=(None, 1), width=dp(320))
         scroller.add_widget(self.form)
         self.add_widget(scroller)
 
-        right = BoxLayout(orientation='vertical', spacing=4)
-        self.button_row = BoxLayout(size_hint_y=None, height=44, spacing=4)
+        right = BoxLayout(orientation='vertical', spacing=dp(4))
+        self.button_row = BoxLayout(size_hint_y=None, height=dp(48), spacing=dp(4))
         right.add_widget(self.button_row)
         self.plot = PlotWidget()
         right.add_widget(self.plot)
-        self.status = Label(text='', size_hint_y=None, height=24, font_size='12sp')
+        self.status = Label(text='', size_hint_y=None, height=dp(28), font_size='12sp',
+                             halign='left', valign='middle', shorten=True)
+        self.status.bind(size=self.status.setter('text_size'))
         right.add_widget(self.status)
         self.add_widget(right)
 
