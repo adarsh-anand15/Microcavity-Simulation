@@ -1,0 +1,30 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'android_app/**'
+      - '.github/workflows/android-build.yml'
+  pull_request:
+    paths:
+      - 'android_app/**'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build debug APK with buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          workdir: android_app
+          buildozer_version: stable
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: microcavity-sim-debug-apk
+          path: android_app/bin/*.apk
