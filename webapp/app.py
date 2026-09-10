@@ -5,6 +5,7 @@ each with a parameter panel driving a transfer-matrix reflectivity /
 field-profile / dispersion calculation from physics.py.
 """
 
+import time
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -93,8 +94,17 @@ def _field_ylim(stack, lambda_c, Ei, max_tleg, nc):
     return max(ymax, abs(ymin))
 
 
+_MAX_PLOT_POINTS = 4000
+
+
 def _plot_field(stack, lambda_c, Ei, t, tleg, ylimit, title):
     x, y = field_profile(stack, lambda_c, Ei, t)
+    if x.size > _MAX_PLOT_POINTS:
+        # Field profile arrays follow the MATLAB app's per-layer sampling
+        # density (~1000 pts/layer) and can reach 5-figure point counts;
+        # decimate for rendering only, the physics stays untouched.
+        stride = x.size // _MAX_PLOT_POINTS
+        x, y = x[::stride], y[::stride]
     fig, ax = plt.subplots()
     ax.plot(x, y, "b-")
     ax.set_ylim(-ylimit, ylimit)
@@ -105,41 +115,53 @@ def _plot_field(stack, lambda_c, Ei, t, tleg, ylimit, title):
     return fig
 
 
-@st.fragment(run_every=0.1)
-def _animate_field(prefix, stack, lambda_c, Ei, nc, max_tleg, ylimit, title, playing_key, tleg_key):
-    # Always mounted (not conditionally called) so the Play/Stop button's
-    # full-script rerun never races against this fragment's own 0.1s timer.
-    tleg = st.session_state[tleg_key]
-    t = tleg * lambda_c / (4 * C_LIGHT * nc)
-    fig = _plot_field(stack, lambda_c, Ei, t, tleg, ylimit, title)
-    st.pyplot(fig)
-    plt.close(fig)
-    with open("/tmp/animate_debug.log", "a") as f:
-        f.write(f"tick tleg={tleg} playing={st.session_state[playing_key]}\n")
-    if st.session_state[playing_key]:
-        st.session_state[tleg_key] = (tleg + 0.1) % max_tleg
-
-
 def render_field_profile(prefix, stack, lambda_c, Ei, nc, title):
+    # A blocking loop over a single placeholder (rather than st.fragment
+    # run_every) — this app nests the animation inside st.tabs + st.columns,
+    # and fragments there stopped re-rendering / went blank after the
+    # Play/Stop button's full-script rerun, a known rough edge of nesting
+    # auto-rerunning fragments inside tab containers.
     max_tleg = 4.0 * nc
     ylimit = _field_ylim(stack, lambda_c, Ei, max_tleg, nc)
 
-    playing_key = f"{prefix}_playing"
     tleg_key = f"{prefix}_tleg"
-    st.session_state.setdefault(playing_key, False)
+    slider_key = f"{prefix}_tleg_slider"
+    reset_key = f"{prefix}_tleg_reset"
     st.session_state.setdefault(tleg_key, 0.0)
 
-    if st.button("Stop" if st.session_state[playing_key] else "Play", key=f"{prefix}_play_btn"):
-        st.session_state[playing_key] = not st.session_state[playing_key]
-        st.rerun()
+    # A widget's session_state key can't be reassigned after that widget has
+    # been instantiated in the same run, so the post-animation reset to 0 is
+    # deferred to the top of the *next* run, before the slider is created.
+    if st.session_state.pop(reset_key, False):
+        st.session_state[tleg_key] = 0.0
+        st.session_state[slider_key] = 0.0
 
-    if not st.session_state[playing_key]:
+    btn_col, slider_col = st.columns([1, 3])
+    with slider_col:
         tleg = st.slider(
-            "t (× λc/4c)", 0.0, max_tleg, st.session_state[tleg_key], step=0.1, key=f"{prefix}_tleg_slider"
+            "t (× λc/4c)", 0.0, max_tleg, st.session_state[tleg_key], step=0.1, key=slider_key
         )
         st.session_state[tleg_key] = tleg
 
-    _animate_field(prefix, stack, lambda_c, Ei, nc, max_tleg, ylimit, title, playing_key, tleg_key)
+    placeholder = st.empty()
+
+    def draw(tleg_val):
+        t = tleg_val * lambda_c / (4 * C_LIGHT * nc)
+        fig = _plot_field(stack, lambda_c, Ei, t, tleg_val, ylimit, title)
+        placeholder.pyplot(fig)
+        plt.close(fig)
+
+    draw(tleg)
+
+    with btn_col:
+        play = st.button("Play one cycle", key=f"{prefix}_play_btn")
+    if play:
+        n_frames = int(round(max_tleg / 0.1))
+        for i in range(n_frames):
+            draw((i * 0.1) % max_tleg)
+            time.sleep(0.1)
+        st.session_state[reset_key] = True
+        st.rerun()
 
 
 # ---------------------------------------------------------- experimental --
@@ -282,13 +304,14 @@ def render_microcavity_tab():
             theta_deg = np.arange(-60, 61, 2)
             LambdaCRs = np.full(theta_deg.shape, np.nan)
             LambdaCRp = np.full(theta_deg.shape, np.nan)
-            for i, td in enumerate(theta_deg):
-                theta_i = np.deg2rad(float(td))
-                lambda_c_theta = _lambda_c_theta(gen, cavity, theta_i)
-                if np.isnan(lambda_c_theta):
-                    continue
-                stack = _mc_stack(theta_i, gen, d1, cavity, d2)
-                LambdaCRs[i], LambdaCRp[i], _ = lambda_resonance(stack, lambda_c_theta, gen["theta_Ei"])
+            with st.spinner("Sweeping angle of incidence (61 resonance searches)..."):
+                for i, td in enumerate(theta_deg):
+                    theta_i = np.deg2rad(float(td))
+                    lambda_c_theta = _lambda_c_theta(gen, cavity, theta_i)
+                    if np.isnan(lambda_c_theta):
+                        continue
+                    stack = _mc_stack(theta_i, gen, d1, cavity, d2)
+                    LambdaCRs[i], LambdaCRp[i], _ = lambda_resonance(stack, lambda_c_theta, gen["theta_Ei"])
 
             fig, ax = plt.subplots()
             if plot_choice == "LambdaC vs thetai":
