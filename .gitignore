@@ -8,3 +8,7 @@ octave-workspace
 
 # Office lock files
 ~$*
+
+# Python virtualenvs (webapp/venv, or any created at repo root)
+venv/
+.venv/
