@@ -14,26 +14,28 @@ physics:
 
 | App | Location | Stack | Status |
 |---|---|---|---|
-| Original desktop app | [`Microcavity_Simulation.mlapp`](Microcavity_Simulation.mlapp) + root `.m` files | MATLAB App Designer | Reference implementation |
+| Original desktop app | [`matlab/`](matlab/) | MATLAB App Designer | Reference implementation |
 | Web app | [`webapp/`](webapp/) | Python, Streamlit | Active port |
 | Android app | [`android_app/`](android_app/) | Python, Kivy | Active port, built via CI |
 
 ## MATLAB app
 
-The original implementation. See the root `.m` files (`CMatrices.m`,
-`DS_DBR.m`, `DS_Microcavity.m`, `Reflectivity_calc.m`,
+The original implementation, in [`matlab/`](matlab/). See the `.m` files
+there (`CMatrices.m`, `DS_DBR.m`, `DS_Microcavity.m`, `Reflectivity_calc.m`,
 `Stack_field_profile.m`, `Lambda_Resonance.m`, etc.) for the underlying
 transfer-matrix physics.
 
 Requirements: MATLAB R2017a or later.
 
 To run:
-1. Download all the files in the repository into the same folder.
-2. Open `Microcavity_Simulation.mlapp` in MATLAB and run it.
+1. Open the `matlab/` folder in MATLAB (all scripts expect to run with it as
+   the working directory).
+2. Open `Microcavity_Simulation.mlapp` and run it.
 
-A prebuilt Windows standalone (bundling the MATLAB Runtime) is available
-under `Microcavity_Simulation/for_redistribution/MyAppInstaller_web.exe` —
-run it to install without a MATLAB license.
+To rebuild the standalone Windows installer, open `Microcavity_Simulation.prj`
+in MATLAB's Application Compiler and build — the packaged output
+(`matlab/Microcavity_Simulation/for_redistribution/...`) isn't checked into
+git.
 
 ## Web app
 

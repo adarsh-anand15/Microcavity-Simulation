@@ -1,7 +1,7 @@
 # Microcavity Simulation — Python webapp
 
 A Streamlit port of the original MATLAB App Designer app
-(`Microcavity_Simulation.mlapp`) in the parent directory. Simulates a
+(`../matlab/Microcavity_Simulation.mlapp`). Simulates a
 Distributed Bragg Reflector (DBR) and a microcavity made of two DBRs using
 the characteristic (transfer) matrix method: reflectance vs wavelength,
 electric field profile, resonance wavelength vs angle of incidence, and

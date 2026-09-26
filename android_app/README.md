@@ -3,9 +3,10 @@ Android port of the Microcavity Simulation app (Kivy + numpy).
 ## What's here
 
 - `physics.py` — transfer-matrix (Abeles method) physics ported from the
-  original MATLAB files (`CMatrices.m`, `DS_DBR.m`, `DS_Microcavity.m`,
-  `Reflectivity_calc.m`, `Stack_field_profile.m`, `Lambda_Resonance.m`, etc).
-  Default parameter values match `Microcavity_Simulation.mlapp`.
+  original MATLAB files in `../matlab/` (`CMatrices.m`, `DS_DBR.m`,
+  `DS_Microcavity.m`, `Reflectivity_calc.m`, `Stack_field_profile.m`,
+  `Lambda_Resonance.m`, etc). Default parameter values match
+  `../matlab/Microcavity_Simulation.mlapp`.
 - `main.py` — Kivy UI with a DBR tab and a Microcavity tab: parameter form,
   reflectivity-vs-wavelength plot, animated electric-field-profile plot, and
   (for the microcavity) energy-vs-k∥ and resonance-wavelength-vs-angle plots.

@@ -1,0 +1,10 @@
+# MATLAB Application Compiler packaging output (rebuild with the .prj files)
+matlab/Microcavity_Simulation/
+
+# MATLAB / Simulink junk
+*.asv
+*.m~
+octave-workspace
+
+# Office lock files
+~$*
